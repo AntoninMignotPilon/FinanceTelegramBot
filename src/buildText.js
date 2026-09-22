@@ -3,7 +3,7 @@ function calculateVariation(data){
 }
 
 
-function buildOutput(index, data){
+export function buildOutput(index, data){
     const variation = calculateVariation(data)
     const emoji = variation >= 0 ? "🟢" : "🔴"
 
