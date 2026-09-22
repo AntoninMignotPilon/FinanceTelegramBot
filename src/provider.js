@@ -13,8 +13,9 @@ export async function getPrice(index){
 
         const price  = data.chart.result[0].meta.regularMarketPrice
         const previousClose = data.chart.result[0].meta.chartPreviousClose
+        const shortName = data.chart.result[0].meta.shortName
 
-        return { price, previousClose }
+        return { price, previousClose, shortName }
 
     }catch (error){
         console.error("Request error :", error)
