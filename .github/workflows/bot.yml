@@ -2,7 +2,7 @@ name: Stock Digest Bot
 
 on:
   schedule:
-    - cron: "0 8-16 * * 1-5"
+    - cron: "7 7-15 * * 1-5"
   workflow_dispatch:
 
 jobs:
