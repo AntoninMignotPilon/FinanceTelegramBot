@@ -15,7 +15,7 @@ for (const ticker of tickers) {
         const data = await getPrice(ticker)
         lines.push(buildOutput(ticker, data))
     } catch (e) {
-        lines.push(`⚠️ ${ticker} : not found`)
+        lines.push(`⚠️ ${ticker} : indisponible`)
     }
 }
 
