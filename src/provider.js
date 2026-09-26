@@ -1,5 +1,5 @@
 export async function getPrice(ticker) {
-    const maxTentatives = 5;
+    const maxTentatives = 10;
 
     const targetUrl = `https://query1.finance.yahoo.com/v8/finance/chart/${ticker}.PA`;
     const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(targetUrl)}`;
