@@ -1,23 +1,24 @@
 const url = "https://query1.finance.yahoo.com/v8/finance/chart/"
 const place = ".PA"
 
-export async function getPrice(index){
-    try{
-        const reponse = await fetch(url+ index+ place)
+export async function getPrice(ticker) {
+    const targetUrl = `https://query1.finance.yahoo.com/v8/finance/chart/${ticker}.PA`;
 
-        if (!reponse.ok){
-            throw new Error(`HTTP Error : ${reponse.status}`)
-        }
+    const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(targetUrl)}`;
 
-        const data = await reponse.json()
+    const response = await fetch(proxyUrl);
+    if (!response.ok) throw new Error(`Erreur Proxy: ${response.status}`);
 
-        const price  = data.chart.result[0].meta.regularMarketPrice
-        const previousClose = data.chart.result[0].meta.chartPreviousClose
-        const shortName = data.chart.result[0].meta.shortName
+    const proxyData = await response.json();
 
-        return { price, previousClose, shortName }
+    const yahooData = JSON.parse(proxyData.contents);
 
-    }catch (error){
-        console.error("Request error :", error)
-    }
+    const result = yahooData.chart.result[0];
+    const meta = result.meta;
+
+    return {
+        price: meta.regularMarketPrice,
+        previousClose: meta.chartPreviousClose,
+        shortName: meta.shortName || ticker
+    };
 }
