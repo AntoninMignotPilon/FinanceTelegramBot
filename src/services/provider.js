@@ -1,7 +1,7 @@
 export async function getPrice(ticker) {
-    const maxTentatives = 10;
+    const maxTentatives = 3;
 
-    const targetUrl = `https://query1.finance.yahoo.com/v8/finance/chart/${ticker}.PA`;
+    const targetUrl = `https://query1.finance.yahoo.com/v8/finance/chart/${ticker}`;
     const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(targetUrl)}`;
 
     for (let tentative = 1; tentative <= maxTentatives; tentative++) {

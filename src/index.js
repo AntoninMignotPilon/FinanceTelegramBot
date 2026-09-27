@@ -1,7 +1,7 @@
 import "dotenv/config"
-import { getPrice } from "./provider.js"
-import { buildOutput } from "./buildText.js"
-import { sendToTelegram } from "./notifier.js"
+import { getPrice } from "./services/provider.js"
+import { buildOutput } from "./services/buildText.js"
+import { sendToTelegram } from "./telegram/notifier.js"
 
 function getTickers() {
     return process.env.TRACKED_TICKERS.split(",").map(t => t.trim())
