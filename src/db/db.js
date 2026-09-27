@@ -1,6 +1,6 @@
 import { DatabaseSync } from "node:sqlite"
-const db = new DatabaseSync("data.db")
-
+const dbPath = process.env.DB_PATH || "data.db"
+const db = new DatabaseSync(dbPath)
 db.exec(`
     CREATE TABLE IF NOT EXISTS subscriptions (
         user_id INTEGER,
