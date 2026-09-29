@@ -1,22 +1,31 @@
 import "dotenv/config"
-import { getPrice } from "./services/provider.js"
-import { buildOutput } from "./services/buildText.js"
-import { sendToTelegram } from "./telegram/notifier.js"
+import cron from "node-cron"
+import { Telegraf } from "telegraf"
+import {helpCommand} from "./commands/help.js";
+import {followCommand} from "./commands/follow.js";
+import {listCommand} from "./commands/list.js";
+import {unfollowCommand} from "./commands/unfollow.js";
+import {sendDigests} from "./services/digest.js";
 
-function getTickers() {
-    return process.env.TRACKED_TICKERS.split(",").map(t => t.trim())
-}
-
-const tickers = getTickers()
-const lines = []
-
-for (const ticker of tickers) {
+cron.schedule("0 19 * * *", async () => {
     try {
-        const data = await getPrice(ticker)
-        lines.push(buildOutput(ticker, data))
+        await sendDigests()
     } catch (e) {
-        lines.push(`⚠️ ${ticker} : indisponible`)
+        console.error("Erreur digest:", e)
     }
-}
+}, { timezone: "Europe/Paris" })
 
-await sendToTelegram(lines.join("\n"))
+const index = new Telegraf(process.env.TELEGRAM_BOT_TOKEN)
+
+index.start(helpCommand)
+index.help(helpCommand)
+index.command("follow", followCommand)
+index.command("list", listCommand)
+index.command("unfollow", unfollowCommand)
+
+index.launch().catch(e => console.error("LAUNCH FAIL:", e))
+console.log("Bot launching...")
+
+// Arrêt propre : ferme la connexion Telegram quand le index est stoppé
+process.once("SIGINT", () => index.stop("SIGINT"))
+process.once("SIGTERM", () => index.stop("SIGTERM"))
