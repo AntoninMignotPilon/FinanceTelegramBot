@@ -23,8 +23,8 @@ bot.command("follow", followCommand)
 bot.command("list", listCommand)
 bot.command("unfollow", unfollowCommand)
 
-bot.launch()
-console.log("Bot started...")
+bot.launch().catch(e => console.error("LAUNCH FAIL:", e))
+console.log("Bot launching...")
 
 // Arrêt propre : ferme la connexion Telegram quand le bot est stoppé
 process.once("SIGINT", () => bot.stop("SIGINT"))
